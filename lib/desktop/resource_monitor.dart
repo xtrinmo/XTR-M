@@ -12,7 +12,7 @@ class DeviceResources {
  static void start(){_timer??=Timer.periodic(Duration(seconds:ResourceSettings.instance.refreshSeconds),(_)=>refresh());if(stats.value.isEmpty)refresh();}
  static void restart(){_timer?.cancel();_timer=Timer.periodic(Duration(seconds:ResourceSettings.instance.refreshSeconds),(_)=>refresh());refresh();}
  static String bytes(dynamic v){if(v is! num)return 'N/A';final n=v.toDouble();const units=['B','KB','MB','GB','TB'];var value=n;var index=0;while(value>=1024&&index<units.length-1){value/=1024;index++;}return '${value.toStringAsFixed(index==0?0:1)} ${units[index]}';}
- static bool get cpuWarn {final v=stats.value['cpuPercent'];if(v is! num){_cpuSince=null;return false;}if(v>ResourceSettings.instance.get('highCpu')){_cpuSince??=DateTime.now();return DateTime.now().difference(_cpuSince!).inSeconds>=10;}_cpuSince=null;return false;}
+ static bool get cpuWarn {final v=stats.value['cpuPercent'];if(v is! num){_cpuSince=null;return false;}if(v>(ResourceSettings.instance.get('highCpu') as num? ?? 90)){_cpuSince??=DateTime.now();return DateTime.now().difference(_cpuSince!).inSeconds>=10;}_cpuSince=null;return false;}
  static double? percent(dynamic used,dynamic total){if(used is! num||total is! num||total<=0)return null;return used*100/total;}
 }
 class ResourceMonitor extends StatelessWidget {const ResourceMonitor({super.key,this.compact=false});final bool compact;
