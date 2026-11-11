@@ -15,11 +15,12 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.32.8'
       - name: Generate Android scaffolding
         run: |
           cp android/app/src/main/kotlin/com/xtrm/launcher/MainActivity.kt /tmp/xtrm-main.kt
           flutter create . --platforms=android --project-name xtrm --org com.xtrm || true
-          git checkout -- lib/ android/app/build.gradle android/settings.gradle android/build.gradle android/gradle/wrapper/gradle-wrapper.properties || true
+          git checkout -- pubspec.yaml lib/ android/app/build.gradle android/settings.gradle android/build.gradle android/gradle/wrapper/gradle-wrapper.properties || true
           mkdir -p android/app/src/main/kotlin/com/xtrm/launcher
           cp /tmp/xtrm-main.kt android/app/src/main/kotlin/com/xtrm/launcher/MainActivity.kt
           flutter pub get
