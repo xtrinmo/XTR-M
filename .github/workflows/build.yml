@@ -19,10 +19,14 @@ jobs:
       - name: Generate Android scaffolding
         run: |
           cp android/app/src/main/kotlin/com/xtrm/launcher/MainActivity.kt /tmp/xtrm-main.kt
+          cp android/app/src/main/AndroidManifest.xml /tmp/xtrm-manifest.xml || true
+          rm -rf android
           flutter create . --platforms=android --project-name xtrm --org com.xtrm || true
-          git checkout -- pubspec.yaml lib/ android/app/build.gradle android/settings.gradle android/build.gradle android/gradle/wrapper/gradle-wrapper.properties || true
+          git checkout -- pubspec.yaml lib/ || true
+          rm -f android/settings.gradle.kts android/build.gradle.kts android/app/build.gradle.kts
           mkdir -p android/app/src/main/kotlin/com/xtrm/launcher
           cp /tmp/xtrm-main.kt android/app/src/main/kotlin/com/xtrm/launcher/MainActivity.kt
+          cp /tmp/xtrm-manifest.xml android/app/src/main/AndroidManifest.xml || true
           flutter pub get
       - name: Build release APK
         run: flutter build apk --release
