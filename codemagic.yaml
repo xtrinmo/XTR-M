@@ -1,0 +1,40 @@
+workflows:
+  xtrm-android-release:
+    name: XTR-M Android Release
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Generate Android scaffolding
+        script: |
+          cp android/app/src/main/kotlin/com/xtrm/launcher/MainActivity.kt /tmp/xtrm-main.kt
+          flutter create . --platforms=android --project-name xtrm --org com.xtrm || true
+          git checkout -- lib/ android/app/build.gradle android/settings.gradle android/build.gradle android/gradle/wrapper/gradle-wrapper.properties || true
+          mkdir -p android/app/src/main/kotlin/com/xtrm/launcher android/app/src/main
+          cp /tmp/xtrm-main.kt android/app/src/main/kotlin/com/xtrm/launcher/MainActivity.kt
+          cat > android/app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.INTERNET" />
+              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+              <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+              <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+              <application android:label="XTR-M" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">
+                  <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
+                      <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme" />
+                      <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+                  </activity>
+                  <meta-data android:name="flutterEmbedding" android:value="2" />
+              </application>
+          </manifest>
+          EOF
+          flutter pub get
+          flutter pub run flutter_launcher_icons
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Analyze Dart source
+        script: flutter analyze
+      - name: Build release APK
+        script: flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk

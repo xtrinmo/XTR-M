@@ -1,0 +1,25 @@
+name: xtrm
+description: XTR-M desktop launcher shell
+publish_to: none
+version: 1.0.14+14
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  webview_flutter: ^4.10.0
+  path_provider: ^2.1.5
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter_launcher_icons: ^0.14.3
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icon/logo.png
+flutter_launcher_icons:
+  android: true
+  image_path: assets/icon/logo.png
+  min_sdk_android: 21
