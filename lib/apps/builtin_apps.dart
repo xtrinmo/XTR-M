@@ -7,7 +7,6 @@ import '../desktop/desktop_home.dart' show desktopWallpaper, requestGameBooster;
 import 'browser_widget.dart';
 import 'docs_widget.dart';
 import 'key_capture_dialog.dart';
-import '../desktop/resource_monitor.dart';
 import '../desktop/resource_settings.dart';
 import 'resource_settings_screen.dart';
 
