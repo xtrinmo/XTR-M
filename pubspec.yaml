@@ -19,7 +19,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/logo.png
-flutter_launcher_icons:
-  android: true
-  image_path: assets/icon/logo.png
-  min_sdk_android: 21
